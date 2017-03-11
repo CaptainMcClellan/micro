@@ -16,6 +16,6 @@ color constant.number "(?i)#[0-9A-F]{6,6}"
 #Don't want or need tag highlighting outside of a tag! :)
 color default start=">" end="<"
 color symbol.tag "<|>"
-color constant.string.url "(ftp(s)?|http(s)?|git|chrome)://[^ 	]+"
+color constant.string.url "(ftp(s)?|http(s)?|git|chrome)://[^ 	)>"']+"
 color comment "<!--.+?-->"
 color preproc "<!DOCTYPE.+?>"
