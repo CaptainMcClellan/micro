@@ -143,6 +143,7 @@ Here is a list of the colorscheme groups that you can use:
 * statusline (color of the statusline)
 * tabbar ( color of the tabbar that lists open files.)
 * indent-char (color of the character which indicates tabs if the option is enabled)
+* divider ( The color of the vertical divider between splits. )
 * line-number
 * gutter-error
 * gutter-warning
