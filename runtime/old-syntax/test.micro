@@ -1,0 +1,4 @@
+syntax "testmicro" "\.testmicro$"
+
+color preproc "(w(er|gl(e)?)|flerge)"
+color preproc ""

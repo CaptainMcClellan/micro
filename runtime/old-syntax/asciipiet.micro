@@ -1,0 +1,29 @@
+#Ascii piet
+#See https://github.com/CaptainMcClellan/asciipiet/
+
+syntax "piet" "\.apiet$"
+
+#Colors are syntatically important in Piet!
+#Therefore they are hardcoded!
+color-link default "black, white"
+color lightred,lightred         "q"
+color medred,medred             "a"
+color darkred,darkred           "z"
+color lightyellow,lightyellow   "w"
+color medyellow,medyellow       "s"
+color darkyellow,darkyellow     "x"
+color lightgreen,lightgreen     "e"
+color medgreen,medgreen         "d"
+color darkgreen,darkgreen       "c"
+color lightcyan,lightcyan       "r"
+color medcyan,medcyan           "f"
+color darkcyan,darkcyan         "v"
+color lightblue,lightblue       "t"
+color medblue,medblue           "g"
+color darkblue,darkblue         "b"
+color lightmagenta,lightmagenta "y"
+color medmagenta,medmagenta     "h"
+color darkmagenta,darkmagenta   "n"
+color white,white               " "
+color black,black "[^qazwsxedcrfvtgbyhn ]"
+color bold "\{grid[^}]+\}"
