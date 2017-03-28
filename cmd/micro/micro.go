@@ -201,6 +201,14 @@ func InitScreen() {
 // RedrawAll redraws everything -- all the views and the messenger
 func RedrawAll() {
 	messenger.Clear()
+
+	w, h := screen.Size()
+	for x := 0; x < w; x++ {
+		for y := 0; y < h; y++ {
+			screen.SetContent(x, y, ' ', nil, defStyle)
+		}
+	}
+
 	for _, v := range tabs[curTab].views {
 		v.Display()
 	}
@@ -227,9 +235,6 @@ func LoadAll() {
 	for _, tab := range tabs {
 		for _, v := range tab.views {
 			v.Buf.UpdateRules()
-			if v.Buf.Settings["syntax"].(bool) {
-				v.matches = Match(v)
-			}
 		}
 	}
 }
@@ -383,7 +388,6 @@ func main() {
 
 	for _, t := range tabs {
 		for _, v := range t.views {
-			v.Buf.FindFileType()
 			v.Buf.UpdateRules()
 			for pl := range loadedPlugins {
 				_, err := Call(pl+".onViewOpen", v)
@@ -391,9 +395,6 @@ func main() {
 					TermMessage(err)
 					continue
 				}
-			}
-			if v.Buf.Settings["syntax"].(bool) {
-				v.matches = Match(v)
 			}
 		}
 	}
