@@ -8,13 +8,21 @@ rules:
     #    start: ">"
     #    end: "<"
     #    rules: []
+    - identifier: "<.*?>"
+    - special: "&[^;[[:space:]]]*;"
+    - statement: "(alt|bgcolor|height|href|label|longdesc|name|onclick|onfocus|onload|onmouseover|size|span|src|style|target|type|value|width)=" 
+    - constant.string:
+            start: "\""
+            end: "\""
+            rules:
+                - constant.specialChar: "\\\\."
     - preproc:
-        start: "<script( [^>]+?|>)"
+        start: "<script( [^>]+?>|>)"
         end: "</script>"
         rules:
             - include: "javascript"
     - preproc:
-        start: "<style( [^>]+|>)"
+        start: "<style( [^>]+>|>)"
         end: "</style>"
         rules:
             - include: "css"
