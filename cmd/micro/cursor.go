@@ -243,7 +243,7 @@ func (c *Cursor) RuneUnder(x int) rune {
 // UpN moves the cursor up N lines (if possible)
 func (c *Cursor) UpN(amount int) {
 	proposedY := c.Y - amount
-	if proposedY < 0 {
+	 if proposedY < 0 {
 		proposedY = 0
 	} else if proposedY >= c.buf.NumLines {
 		proposedY = c.buf.NumLines - 1
@@ -253,10 +253,11 @@ func (c *Cursor) UpN(amount int) {
 	}
 
 	c.Y = proposedY
-	runes := []rune(c.buf.Line(c.Y))
+	// There's no need to keep a rune array in memory if we only need the length
+	linelen := len([]rune(c.buf.Line(c.Y)))
 	c.X = c.GetCharPosInLine(c.Y, c.LastVisualX)
-	if c.X > len(runes) {
-		c.X = len(runes)
+	if c.X > linelen {
+		c.X = linelen
 	}
 }
 
@@ -265,14 +266,53 @@ func (c *Cursor) DownN(amount int) {
 	c.UpN(-amount)
 }
 
+func (c *Cursor) UpVisualN(amount int) {
+	c.UpN(amount)
+	return
+	linelength := len([]rune(c.buf.Line(c.Y)))
+	vline := 0
+	// bufwidth := CurView().Width
+	// CurView().Width
+	proposedY := c.Y
+	proposedX := c.X
+	if linelength < CurView().Width {
+		proposedY = c.Y - amount
+	} else {
+		if linelength > CurView().Width * vline{
+			proposedX = c.X + CurView().Width
+		} else if vline == 0 {
+			proposedX = c.X - CurView().Width
+		}
+	}
+	if proposedY < 0 {
+		proposedY = 0
+	} else if proposedY >= c.buf.NumLines {
+		proposedY = c.buf.NumLines - 1
+	}
+	c.Y = proposedY
+	c.X = proposedX
+}
+
+func (c *Cursor) DownVisualN(amount int) {
+	c.UpVisualN(-amount)
+}
+
 // Up moves the cursor up one line (if possible)
 func (c *Cursor) Up() {
-	c.UpN(1)
+	if c.buf.Settings["softwrap"].(bool) {
+		c.UpVisualN(1)
+	} else {
+		c.UpN(1)
+	}
 }
 
 // Down moves the cursor down one line (if possible)
 func (c *Cursor) Down() {
-	c.DownN(1)
+	if c.buf.Settings["softwrap"].(bool) {
+		c.DownVisualN(1)
+	} else {
+		c.DownN(1)
+	}
 }
 
 // Left moves the cursor left one cell (if possible) or to the last line if it is at the beginning
@@ -351,4 +391,5 @@ func (c *Cursor) Relocate() {
 	} else if c.X > Count(c.buf.Line(c.Y)) {
 		c.X = Count(c.buf.Line(c.Y))
 	}
+	CurView().Relocate()
 }
