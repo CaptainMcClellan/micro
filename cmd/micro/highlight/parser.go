@@ -43,8 +43,7 @@ type pattern struct {
 	regex *regexp.Regexp
 }
 
-// rules defines which patterns and regions can be used to highlight
-// a filetype
+// rules define which patterns and regions can be used to highlight a filetype
 type rules struct {
 	regions  []*region
 	patterns []*pattern

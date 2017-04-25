@@ -4,16 +4,6 @@ detect:
     filename: "\\.htm[l]?$"
 
 rules:
-   # - error: "<[^!].*?>"
-    #- symbol.tag: "(?i)<[/]?(a(bbr|cronym|ddress|pplet|rea|rticle|side|udio)?|b(ase(font)?|d(i|o)|ig|lockquote|r)?|ca(nvas|ption)|center|cite|co(de|l|lgroup)|d(ata(list)?|d|el|etails|fn|ialog|ir|l|t)|em(bed)?|fieldset|fig(caption|ure)|font|form|(i)?frame|frameset|h[1-6]|hr|i|img|in(put|s)|kbd|keygen|label|legend|li(nk)?|ma(in|p|rk)|menu(item)?|met(a|er)|nav|no(frames|script)|o(l|pt(group|ion)|utput)|p(aram|icture|re|rogress)?|q|r(p|t|uby)|s(trike)?|samp|se(ction|lect)|small|source|span|strong|su(b|p|mmary)|textarea|time|track|u(l)?|var|video|wbr)( [^>]+?>|>)>"
-    #- symbol.tag.extended: "(?i)<[/]?(body|div|html|head(er)?|footer|title|table|t(body|d|h(ead)?|r|foot))( [^>]+?>|>)"
-    #- symbol: "[:=]"
-    #- identifier: "(alt|bgcolor|height|href|id|label|longdesc|name|on(click|focus|load|mouseover)|size|span|src|target|type|value|width)="
-    #- special: "&[^; 	]{1,6};"
-    #- symbol.tag: "<|>"
-    #- comment: "<!--.+?-->"
-    #- preproc: "<!DOCTYPE.+?>"
-
     - default:
         start: "<script.*?>"
         end: "</script.*?>"
@@ -29,16 +19,15 @@ rules:
             - include: "css"
 
     - error: "<[^!].*?>" 
-    - special: "&[^; 	]{1,6};"
-    - default: 
+    - error: 
         start: "(?i)<[/]?(a(bbr|cronym|ddress|pplet|rea|rticle|side|udio)?|b(ase(font)?|d(i|o)|ig|lockquote|r)?|ca(nvas|ption)|center|cite|co(de|l|lgroup)|d(ata(list)?|d|el|etails|fn|ialog|ir|l|t)|em(bed)?|fieldset|fig(caption|ure)|font|form|(i)?frame|frameset|h[1-6]|hr|i|img|in(put|s)|kbd|keygen|label|legend|li(nk)?|ma(in|p|rk)|menu(item)?|met(a|er)|nav|no(frames|script)|o(l|pt(group|ion)|utput)|p(aram|icture|re|rogress)?|q|r(p|t|uby)|span|samp|se(ction|lect)|small|source|strong|su(b|p|mmary)|s(trike)?|textarea|time|track|u(l)?|var|video|wbr)"
         end: ">"
         limit-group: symbol.tag
         rules:
-            - identifier: "(alt|bgcolor|height|href|id|label|longdesc|name|on(click|focus|load|mouseover)|size|span|src|style|target|type|value|width)="
+            - default: " "
+            - identifier: "(alt|bgcolor|class|height|href|id|label|longdesc|name|on(click|focus|load|mouseover)|size|span|src|style|target|type|value|width)="
             - identifier.macro: "(accept-charset|action|autocomplete|cols|disabled|enctype|novalidate|readonly|required|rows|selected|target)"
             - constant.number: "(?i)#[0-9A-F]{6,6}"
-            - special: "&[^; ]{1,6};"
             - symbol: "[:=]"
             - constant.string:
                start: "\\\""
@@ -46,7 +35,12 @@ rules:
                skip: "\\\\."
                rules:
                     - constant.specialChar: "\\\\."
-    - default: 
+                    - constant.number: "(?i)#[0-9A-F]{6,6}"
+                    - constant.string.url:
+                        start: "(ftp(s)?|http(s)?|git|chrome)://"
+                        end: "[ 	)>\"']"
+                        rules: [] 
+    - error: 
        start: "(?i)<[/]?(body|div|html|head(er)?|footer|title|table|t(body|d|h(ead)?|r|foot))"
        #( [^>]+?|>)"
        end: ">"
@@ -55,14 +49,11 @@ rules:
            - identifier: "(alt|bgcolor|class|height|href|id|label|longdesc|name|on(click|focus|load|mouseover)|size|span|src|style|target|type|value|width)="
            - identifier.macro: "(accept-charset|action|autocomplete|cols|disabled|enctype|novalidate|readonly|required|rows|selected|target)"
            - constant.number: "(?i)#[0-9A-F]{6,6}"
-           - special: "&[^; ]{1,6};"
            - symbol: "[:=]"
-    #- symbol.tag: "<|>"
-    - special: "&[^; ]{1,6};"
-    - constant.string.url: "(ftp(s)?|http(s)?|git|chrome)://[^ 	)>\"']+?"
+    - special: "&.{1,6}?;"
     - comment: 
         start: "<!--"
         end: "-->"
         rules: []
-        
+    - constant.string.url: "(ftp(s)?|http(s)?|git|chrome)://[^ 	)>\"']+"
     - preproc: "<!DOCTYPE.+?>"
