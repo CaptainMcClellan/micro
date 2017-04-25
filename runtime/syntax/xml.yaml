@@ -4,8 +4,8 @@ detect:
     filename: "\\.(xml|sgml?|rng|plist)$"
 
 rules:
-    - identifier: "<.*?>"
-    - comment:
+    - symbol.tag: "<.*?>"
+    - preproc:
         start: "<!DOCTYPE"
         end: "[/]?>"
         rules: []

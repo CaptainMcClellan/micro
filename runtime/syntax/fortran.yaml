@@ -36,7 +36,7 @@ rules:
     - symbol.operator: "[.:;,+*|=!\\%]|/|-|&"
 
       #Parenthetical Color
-    - symbol.bracket: "[(){}]|\\[|\\]"
+    - symbol.brackets: "[(){}]|\\[|\\]"
 
       # Add preprocessor commands.
     - preproc: "^[[:space:]]*#[[:space:]]*(define|include|(un|ifn?)def|endif|el(if|se)|if|warning|error)"

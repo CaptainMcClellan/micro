@@ -20,9 +20,7 @@ rules:
     - constant.bool: "\\b(true|false|nil)\\b"
 
       # Brackets
-    - symbol.brackets: "(\\{|\\})"
-    - symbol.brackets: "(\\(|\\))"
-    - symbol.brackets: "(\\[|\\])"
+    - symbol.brackets: "[(){}]|\\[|\\]"
 
       # Numbers and strings
     - constant.number: "\\b([0-9]+|0x[0-9a-fA-F]*)\\b|'.'"

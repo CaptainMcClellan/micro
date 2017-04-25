@@ -10,7 +10,7 @@ rules:
     - statement: "\\b(var|let|embed)\\b"
     - statement: "\\b(new|be|fun)\\b"
     - statement: "\\b(iso|trn|ref|val|box|tag|consume)\\b"
-    - statement: "\\b(break|continue|return|error)\\b"
+    - special: "\\b(break|continue|return|error)\\b"
     - statement: "\\b(if|then|elseif|else|end|match|where|try|with|as|recover|object|lambda|as|digestof|ifdef)\\b"
     - statement: "\\b(while|do|repeat|until|for|in)\\b"
     - statement: "(\\?|=>)"

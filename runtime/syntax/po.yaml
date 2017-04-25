@@ -4,7 +4,7 @@ detect:
     filename: "\\.pot?$"
 
 rules:
-    - preproc: "\\b(msgid|msgstr)\\b"
+    - preproc: "\\bmsg(id|str)\\b"
     - constant.string: "\"(\\\\.|[^\"])*\"|'(\\\\.|[^'])*'"
     - special: "\\\\.?"
     - comment: "(^|[[:space:]])#([^{].*)?$"

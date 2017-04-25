@@ -1,13 +1,14 @@
 filetype: git-rebase-todo
 
 detect:
-    filename: "git-rebase-todo"
+    filename: "git-rebase-todo[^(.yaml)]"
 
 rules:
     # Comments
     - comment:
         start: "#"
         end: "$"
+        limit-group: special
         rules: []
     # Rebase commands
     - statement: "^(e|edit) [0-9a-f]{7,40}"
@@ -22,7 +23,5 @@ rules:
     - statement: "^#  (s, squash)"
     - statement: "^(x|exec) [^ ]+ [0-9a-f]{7,40}"
     - statement: "^#  (x, exec)"
-    # Recolor hash symbols
-    - special: "#"
     # Commit IDs
     - identifier: "[0-9a-f]{7,40}"

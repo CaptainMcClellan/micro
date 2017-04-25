@@ -5,7 +5,7 @@ detect:
 
 rules:
     # Tables (Github extension)
-    - type: ".*[ :]\\|[ :].*"
+    - preproc: ".*[ :\\-=]\\|[ :\\-=].*"
 
       # quotes
     - statement:  "^>.*"
@@ -14,16 +14,16 @@ rules:
     - type: "(^|[[:space:]])(_[^ ][^_]*_|\\*[^ ][^*]*\\*)"
 
       # Strong emphasis
-    - type: "(^|[[:space:]])(__[^ ][^_]*__|\\*\\*[^ ][^*]*\\*\\*)"
+    - type.keyword: "(^|[[:space:]])(__[^ ][^_]*__|\\*\\*[^ ][^*]*\\*\\*)"
 
       # strike-through
     - type: "(^|[[:space:]])~~[^ ][^~]*~~"
 
       # horizontal rules
-    - special: "^(---+|===+|___+|\\*\\*\\*+)\\s*$"
+    - symbol: "^(---+|===+|___+|\\*\\*\\*+)\\s*$"
 
       # headlines
-    - special:  "^#{1,6}.*"
+    - statement:  "^#{1,6}.*"
 
       # lists
     - identifier:   "^[[:space:]]*[\\*+-] |^[[:space:]]*[0-9]+\\. "
@@ -39,7 +39,7 @@ rules:
     - underlined: "!\\[[^][]*\\](\\([^)]+\\)|\\[[^]]+\\])"
 
       # urls
-    - underlined: "https?://[^ )>]+"
+    - underlined.url: "https?://[^ )>]+"
 
     - special: "^```$"
 

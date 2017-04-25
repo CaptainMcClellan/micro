@@ -5,10 +5,10 @@ detect:
 
 rules:
     ## Keywords
-    - keyword: "(?i)^(FROM|MAINTAINER|RUN|CMD|LABEL|EXPOSE|ENV|ADD|COPY|ENTRYPOINT|VOLUME|USER|WORKDIR|ONBUILD|ARG|HEALTHCHECK|STOPSIGNAL|SHELL)[[:space:]]"
+    - statement: "(?i)^(FROM|MAINTAINER|RUN|CMD|LABEL|EXPOSE|ENV|ADD|COPY|ENTRYPOINT|VOLUME|USER|WORKDIR|ONBUILD|ARG|HEALTHCHECK|STOPSIGNAL|SHELL)[[:space:]]"
 
       ## Brackets & parenthesis
-    - statement: "(\\(|\\)|\\[|\\])"
+    - symbol.brackets: "[()]|\\[|\\]"
 
       ## Double ampersand
     - special: "&&"

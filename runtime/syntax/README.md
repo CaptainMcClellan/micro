@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+>>>>>>>> HEAD
 # Syntax Files
 
 Here are micro's syntax files.

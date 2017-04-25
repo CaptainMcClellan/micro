@@ -34,7 +34,7 @@ rules:
 
       ## Control Structions
     - statement: "\\b(case|class|default|do|double|else|false|for|if|new|null|private|protected|public|short|signed|static|String|switch|this|throw|try|true|unsigned|void|while)\\b" 
-    - statement: "\\b(goto|continue|break|return)\\b"
+    - special: "\\b(goto|continue|break|return)\\b"
 
       ## Math
     - identifier: "\\b(abs|acos|asin|atan|atan2|ceil|constrain|cos|degrees|exp|floor|log|map|max|min|radians|random|randomSeed|round|sin|sq|sqrt|tan)\\b"

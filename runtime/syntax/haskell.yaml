@@ -10,7 +10,8 @@ rules:
     - statement: "[ ](as$|case$|of$|class$|data$|default$|deriving$|do$|forall$|foreign$|hiding$|if$|then$|else$|import$|infix$|infixl$|infixr$|instance$|let$|in$|mdo$|module$|newtype$|qualified$|type$|where$)"
 
       # Various symbols
-    - symbol: "(\\||@|!|:|_|~|=|\\\\|;|\\(\\)|,|\\[|\\]|\\{|\\})"
+    - symbol.brackets: "[(){}]|\\[|\\]"
+    - symbol: "(\\||@|!|:|_|~|=|\\\\|;|,)"
 
       # Operators
     - symbol.operator: "(==|/=|&&|\\|\\||<|>|<=|>=)"

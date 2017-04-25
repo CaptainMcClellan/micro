@@ -6,11 +6,11 @@ detect:
 
 rules:
     - type: "(^| )!!(binary|bool|float|int|map|null|omap|seq|set|str) "
-    - constant:  "\\b(YES|yes|Y|y|ON|on|NO|no|N|n|OFF|off)\\b"
-    - constant: "\\b(true|false)\\b"
+    - constant.bool.true:  "\\b(YES|yes|Y|y|ON|on|true)\\b"
+    - constant.bool.false: "\\b(NO|no|N|n|OFF|off|false)\\b"
     - statement: "(:[[:space:]]|\\[|\\]|:[[:space:]]+[|>]|^[[:space:]]*- )"
     - identifier: "[[:space:]][\\*&][A-Za-z0-9]+"
-    - type: "[-.\\w]+:"
+    - type: "[\\-.\\w]+:"
     - statement: ":"
     - special:  "(^---|^\\.\\.\\.|^%YAML|^%TAG)"
 
@@ -31,6 +31,7 @@ rules:
     - comment:
         start: "#"
         end: "$"
-        rules: []
+        rules: 
+            - todo: " (?i)(TODO|FIXME|XXX):?.+$"
 
 

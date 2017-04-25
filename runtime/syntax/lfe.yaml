@@ -4,9 +4,9 @@ detect:
     filename: "lfe$|\\.lfe$"
 
 rules:
-    - symbol.brackets: "\\(|\\)"
-    - type: "defun|define-syntax|define|defmacro|defmodule|export"
-    - constant: "\\ [A-Za-z][A-Za-z0-9_-]+\\ "
+    - symbol.brackets: "[()]"
+    - type: "def(un|ine(-syntax)?|macro|module)|export"
+    - constant: "\\ [A-Za-z][A-Za-z0-9_\\-]+\\ "
     - symbol.operator: "\\(([\\-+*/<>]|<=|>=)|'"
     - constant.number: "\\b[0-9]+\\b"
     - constant.string: "\\\"(\\\\.|[^\"])*\\\""

@@ -11,7 +11,7 @@ rules:
     - statement: "\\b(class|namespace|template|public|protected|private|typename|this|friend|virtual|using|mutable|volatile|register|explicit)\\b"
     - statement: "\\b(for|if|while|do|else|case|default|switch)\\b"
     - statement: "\\b(try|throw|catch|operator|new|delete)\\b"
-    - statement: "\\b(goto|continue|break|return)\\b"
+    - special: "\\b(goto|continue|break|return)\\b"
     - preproc: "^[[:space:]]*#[[:space:]]*(define|pragma|include|(un|ifn?)def|endif|el(if|se)|if|warning|error)"
     - constant: "('([^'\\\\]|(\\\\[\"'abfnrtv\\\\]))'|'\\\\(([0-3]?[0-7]{1,2}))'|'\\\\x[0-9A-Fa-f]{1,2}')"
 

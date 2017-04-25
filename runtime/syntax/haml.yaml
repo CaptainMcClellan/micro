@@ -5,7 +5,7 @@ detect:
 
 rules:
     - symbol: "-|="
-    - default: "->|=>"
+    - statement: "->|=>"
     - constant: "([  ]|^)%[0-9A-Za-z_]+>"
     - special: ":[0-9A-Za-z_]+>"
     - type: "\\.[A-Za-z_]+>"

@@ -5,7 +5,7 @@ detect:
 
 rules:
     - default: "\\([a-z-]+"
-    - symbol: "\\(([\\-+*/<>]|<=|>=)|'"
+    - symbol.operator: "\\(([\\-+*/<>]|<=|>=)|'"
     - constant.number: "\\b[0-9]+b>"
     - special: "\\bnil\\b"
     - preproc: "\\b[tT]b>"

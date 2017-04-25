@@ -10,7 +10,7 @@ rules:
 
       # Cython Keyword Color
     - identifier.macro: "\\b(cdef|cimport|cpdef|cppclass|ctypedef|extern|include|namespace|property|struct)\\b"
-    - type: "\\b(bint|char|double|int|public|void|unsigned)\\b"
+    - type: "\\b(b?int|char|double|public|void|unsigned)\\b"
 
       # Operator Color
     - symbol: "[.:;,+*|=!\\%]|<|>|/|-|&"

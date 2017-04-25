@@ -6,7 +6,7 @@ detect:
 
 rules:
     #Conditionals and code flow
-    - preproc: "\\b(break|case|continue|default|go(to)|range|return)\\b"
+    - special: "\\b(break|case|continue|default|go(to)|range|return)\\b"
     - statement: "\\b(else|for|if|switch)\\b"
     - preproc: "\\b(package|import|const|var|type|struct|func|go|defer|iota)\\b"
     - symbol.operator: "[\\-+/*=<>!~%&|^]|:="

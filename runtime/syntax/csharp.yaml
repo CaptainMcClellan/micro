@@ -11,7 +11,7 @@ rules:
     - identifier.var: "@[A-Za-z]+"
 
     - identifier: "[A-Za-z_][A-Za-z0-9_]*[[:space:]]*[()]"
-    - type: "\\b(bool|byte|sbyte|char|decimal|double|float|IntPtr|int|uint|long|ulong|object|short|ushort|string|base|this|var|void)\\b"
+    - type: "\\b(bool|s?byte|char|decimal|double|float|IntPtr|u?int|u?long|object|u?short|string|base|this|var|void)\\b"
     - statement: "\\b(alias|as|case|catch|checked|default|do|dynamic|else|finally|fixed|for|foreach|goto|if|is|lock|new|null|return|switch|throw|try|unchecked|while)\\b"
     - statement: "\\b(abstract|async|class|const|delegate|enum|event|explicit|extern|get|implicit|in|internal|interface|namespace|operator|out|override|params|partial|private|protected|public|readonly|ref|sealed|set|sizeof|stackalloc|static|struct|typeof|unsafe|using|value|virtual|volatile|yield)\\b"
       # LINQ-only keywords (ones that cannot be used outside of a LINQ query - lots others can)

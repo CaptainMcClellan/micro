@@ -31,7 +31,7 @@ rules:
     - identifier: "^\\s+(function\\s+)[0-9A-Z_]+\\s+\\(\\)" # (i)
 
       ## Variables
-    - identifier: "\\$\\{?[0-9A-Z_!@#$*?-]+\\}?" #(i)
+    - identifier: "\\$\\{?[0-9A-Z_!@#$*?\\-]+\\}?" #(i)
 
     - constant.string:
         start: "\""

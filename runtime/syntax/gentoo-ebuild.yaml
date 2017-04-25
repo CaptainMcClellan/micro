@@ -8,7 +8,8 @@ rules:
     - identifier: "^src_(unpack|compile|install|test)|^pkg_(config|nofetch|setup|(pre|post)(inst|rm))"
       # Highlight bash related syntax
     - statement: "\\b(case|do|done|elif|else|esac|exit|fi|for|function|if|in|local|read|return|select|shift|then|time|until|while|continue|break)\\b"
-    - statement: "(\\{|\\}|\\(|\\)|\\;|\\]|\\[|`|\\\\|\\$|<|>|!|=|&|\\|)"
+    - symbol.brackets: "[(){}]|\\[|\\]"
+    - symbol.operator: "(\\;|`|\\\\|\\$|<|>|!|=|&|\\|)"
     - statement: "-(e|d|f|r|g|u|w|x|L)\\b"
     - statement: "-(eq|ne|gt|lt|ge|le|s|n|z)\\b"
       # Highlight variables ... official portage ones in red, all others in bright red

@@ -7,7 +7,7 @@ detect:
 rules:
     - type: "^From .*"
     - identifier: "^[^[:space:]]+:"
-    - preproc: "^List-(Id|Archive|Subscribe|Unsubscribe|Post|Help):"
+    - preproc: "^List-(Id|Archive|(Uns|S)ubscribe|Post|Help):"
     - constant: "^(To|From):"
     - constant.string:
         start: "^Subject:.*"

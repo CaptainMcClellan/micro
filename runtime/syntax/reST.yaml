@@ -4,15 +4,39 @@ detect:
     filename: "\\.rest$|\\.rst$"
 
 rules:
-    - statement: "\\*\\*[^*]+\\*\\*"
-    - preproc: "::"
-    - constant.string: "`[^`]+`_{1,2}"
-    - constant.string: "``[^`]+``"
-    - identifier: "^\\.\\. .*$"
-    - identifier: "^__ .*$"
-    - type: "^###+$"
-    - type: "^\\*\\*\\*+$"
-    - special: "^===+$"
-    - special: "^---+$"
-    - special: "^\\^\\^\\^+$"
-    - special: "^\"\"\"+$"
+    # Lists, bulleted and enumerated
+    - identifier: "^[\\*+\\-] "
+    - identifier: "^[0-9]+?\\. "
+    # italics
+    - type: "\\*[^*]+?\\*"
+    # bold
+    - type.keyword: "\\*\\*[^\\*]+\\*\\*"
+    # code block
+    - symbol: "::"
+    # link reference
+    - underlined.url: "`[^`]+`_{1,2}"
+    # code
+    - special: "``[^`]+``"
+    # directives or comments
+    - comment: "^\\.\\. .*$"
+    # anon link targets
+    - underlined: "^__ .*$"
+    # h1
+    - statement: "^###+$"
+    - statement: "^\\*\\*\\*+$"
+    # h2
+    - preproc: "^===+$"
+    # h3
+    - identifier: "^---+$"
+    # h4
+    - type.keyword: "^\\^\\^\\^+$"
+    # h5
+    - constant: "^\"\"\"+$"
+
+    # urls
+    - underlined.url: "http(s)?://[^ 	)>]+"
+
+    #Tables
+    - preproc: "\\+[\\-=+]+\\+"
+    - preproc: "\\|"
+

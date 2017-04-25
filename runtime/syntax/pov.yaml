@@ -11,7 +11,8 @@ rules:
     - identifier: "^\\b(texture)\\b"
     - identifier: "\\b(light_source|background)\\b"
     - identifier: "\\b(fog|object|camera)\\b"
-    - symbol.operator: "(\\{|\\}|\\(|\\)|\\;|\\]|\\[|`|\\\\|\\$|<|>|!|=|&|\\|)"
+    - symbol.brackets: "[{}()]|\\[|\\]"
+    - symbol.operator: "(\\;|`|\\\\|\\$|<|>|!|=|&|\\|)"
     - special: "\\b(union|group|subgroup)\\b"
     - comment: "//.*"
     - comment:

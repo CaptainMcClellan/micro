@@ -5,8 +5,8 @@ detect:
 
 rules:
     # Operators and punctuation
-    - statement: "(\\*|/|%|\\+|-|>>|<<|>>>|&|\\^(\\^)?|\\||~)?="
-    - statement: "\\.\\.(\\.)?|!|\\*|&|~|\\(|\\)|\\[|\\]|\\\\|/|\\+|-|%|<|>|\\?|:|;"
+    - symbol: "(\\*|/|%|\\+|-|>>|<<|>>>|&|\\^(\\^)?|\\||~)?="
+    - symbol: "\\.\\.(\\.)?|!|\\*|&|~|\\(|\\)|\\[|\\]|\\\\|/|\\+|-|%|<|>|\\?|:|;"
     # Octal integer literals are deprecated
     - error: "(0[0-7_]*)(L[uU]?|[uU]L?)?"
     # Decimal integer literals
@@ -30,6 +30,7 @@ rules:
         rules:
             - constant.specialChar: "\\\\."
     # Keywords
+    # TODO: Clean up these an use grouping to reduce filesize. Also separate out control flow statements for consistency with other highlighting.
     # a-e
     - statement: "\\b(abstract|alias|align|asm|assert|auto|body|break|case|cast|catch|class|const|continue|debug|default|delegate|do|else|enum|export|extern)\\b"
     # f-l
@@ -48,6 +49,7 @@ rules:
     - type: "\\b(string|wstring|dstring|size_t|ptrdiff_t)\\b"
     # Special tokens
     - constant: "\\b(__DATE__|__EOF__|__TIME__|__TIMESTAMP__|__VENDOR__|__VERSION__)\\b"
+    - constant.bool: "\\b(true|false)\\b"
     # String literals
     # DoubleQuotedString
     - constant.string: 
