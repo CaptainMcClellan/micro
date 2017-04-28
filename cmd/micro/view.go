@@ -11,15 +11,16 @@ import (
 )
 
 type ViewType struct {
+	kind     int
 	readonly bool // The file cannot be edited
 	scratch  bool // The file cannot be saved
 }
 
 var (
-	vtDefault = ViewType{false, false}
-	vtHelp    = ViewType{true, true}
-	vtLog     = ViewType{true, true}
-	vtScratch = ViewType{false, true}
+	vtDefault = ViewType{0, false, false}
+	vtHelp    = ViewType{1, true, true}
+	vtLog     = ViewType{2, true, true}
+	vtScratch = ViewType{3, false, true}
 )
 
 // The View struct stores information about a view into a buffer.
@@ -723,6 +724,14 @@ func (v *View) DisplayView() {
 			realLineN++
 		}
 
+		colorcolumn := int(v.Buf.Settings["colorcolumn"].(float64))
+		if colorcolumn != 0 {
+			style := GetColor("color-column")
+			fg, _, _ := style.Decompose()
+			st := defStyle.Background(fg)
+			screen.SetContent(xOffset+colorcolumn, yOffset+visualLineN, ' ', nil, st)
+		}
+
 		screenX = v.x
 
 		// If there are gutter messages we need to display the '>>' symbol here
@@ -815,6 +824,13 @@ func (v *View) DisplayView() {
 		for _, char := range line {
 			if char != nil {
 				lineStyle := char.style
+
+				colorcolumn := int(v.Buf.Settings["colorcolumn"].(float64))
+				if colorcolumn != 0 && char.visualLoc.X == colorcolumn {
+					style := GetColor("color-column")
+					fg, _, _ := style.Decompose()
+					lineStyle = lineStyle.Background(fg)
+				}
 
 				charLoc := char.realLoc
 				if v.Cursor.HasSelection() &&
