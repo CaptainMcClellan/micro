@@ -16,7 +16,6 @@ rules:
     - type: "\\b(uintptr|byte|rune|string|interface|bool|map|chan|error)\\b"
     - type.keyword: "\\b(struct)\\b"
     - constant.bool: "\\b(true|false|nil)\\b"
-    
     # Brackets
     - symbol.brackets: "[{}()]|\\[|\\]"
     # Numbers and strings
