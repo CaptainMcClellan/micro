@@ -63,44 +63,60 @@ type LineArray struct {
 	lines []Line
 }
 
+func Append(slice []Line, data ...Line) []Line {
+	l := len(slice)
+	if l+len(data) > cap(slice) { // reallocate
+		// Allocate double what's needed, for future growth.
+		newSlice := make([]Line, (l+len(data))+10000)
+		// The copy function is predeclared and works for any slice type.
+		copy(newSlice, slice)
+		slice = newSlice
+	}
+	slice = slice[0 : l+len(data)]
+	for i, c := range data {
+		slice[l+i] = c
+	}
+	return slice
+}
+
 // NewLineArray returns a new line array from an array of bytes
-func NewLineArray(reader io.Reader) *LineArray {
+func NewLineArray(size int64, reader io.Reader) *LineArray {
 	la := new(LineArray)
 
-	var buf bytes.Buffer
-	tee := io.TeeReader(reader, &buf)
-	numlines, _ := lineCounter(tee)
-	if numlines == 0 {
-		numlines = 1
-	}
+	la.lines = make([]Line, 0, 1000)
 
-	la.lines = make([]Line, numlines)
+	br := bufio.NewReader(reader)
+	var loaded int
 
-	br := bufio.NewReader(&buf)
-
-	i := 0
+	n := 0
 	for {
 		data, err := br.ReadBytes('\n')
+
+		if n >= 1000 && loaded >= 0 {
+			totalLinesNum := int(float64(size) * (float64(n) / float64(loaded)))
+			newSlice := make([]Line, len(la.lines), totalLinesNum+10000)
+			// The copy function is predeclared and works for any slice type.
+			copy(newSlice, la.lines)
+			la.lines = newSlice
+			loaded = -1
+		}
+
+		if loaded >= 0 {
+			loaded += len(data)
+		}
+
 		if err != nil {
 			if err == io.EOF {
-				// la.lines[i] = Line{data[:len(data)], nil, nil, false}
-				if i >= len(la.lines) {
-					if len(data) != 0 {
-						la.lines = append(la.lines, Line{data, nil, nil, false})
-					}
-				} else {
-					la.lines[i].data = data
-				}
+				la.lines = Append(la.lines, Line{data[:len(data)], nil, nil, false})
+				// la.lines = Append(la.lines, Line{data[:len(data)]})
 			}
 			// Last line was read
 			break
 		} else {
-			la.lines[i].data = data[:len(data)-1]
-			// la.lines[i] = Line{data[:len(data)-1], nil, nil, false}
+			// la.lines = Append(la.lines, Line{data[:len(data)-1]})
+			la.lines = Append(la.lines, Line{data[:len(data)-1], nil, nil, false})
 		}
-		i++
-	}
-	for i := 0; i < numlines; i++ {
+		n++
 	}
 
 	return la

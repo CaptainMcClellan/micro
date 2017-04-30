@@ -207,7 +207,7 @@ func TabSwitch(args []string) {
 			for _, t := range tabs {
 				v := t.views[t.CurView]
 				if v.Buf.GetName() == args[0] {
-					curTab = v.Num
+					curTab = v.TabNum
 					found = true
 				}
 			}
@@ -320,7 +320,7 @@ func Help(args []string) {
 // If no file is given, it opens an empty buffer in a new split
 func VSplit(args []string) {
 	if len(args) == 0 {
-		CurView().VSplit(NewBuffer(strings.NewReader(""), ""))
+		CurView().VSplit(NewBufferFromString("", ""))
 	} else {
 		filename := args[0]
 		home, _ := homedir.Dir()
@@ -338,9 +338,9 @@ func VSplit(args []string) {
 		var buf *Buffer
 		if err != nil {
 			// File does not exist -- create an empty buffer with that name
-			buf = NewBuffer(strings.NewReader(""), filename)
+			buf = NewBufferFromString("", filename)
 		} else {
-			buf = NewBuffer(file, filename)
+			buf = NewBuffer(file, FSize(file), filename)
 		}
 		CurView().VSplit(buf)
 	}
@@ -350,7 +350,7 @@ func VSplit(args []string) {
 // If no file is given, it opens an empty buffer in a new split
 func HSplit(args []string) {
 	if len(args) == 0 {
-		CurView().HSplit(NewBuffer(strings.NewReader(""), ""))
+		CurView().HSplit(NewBufferFromString("", ""))
 	} else {
 		filename := args[0]
 		home, _ := homedir.Dir()
@@ -368,9 +368,9 @@ func HSplit(args []string) {
 		var buf *Buffer
 		if err != nil {
 			// File does not exist -- create an empty buffer with that name
-			buf = NewBuffer(strings.NewReader(""), filename)
+			buf = NewBufferFromString("", filename)
 		} else {
-			buf = NewBuffer(file, filename)
+			buf = NewBuffer(file, FSize(file), filename)
 		}
 		CurView().HSplit(buf)
 	}
@@ -408,9 +408,9 @@ func NewTab(args []string) {
 
 		var buf *Buffer
 		if err != nil {
-			buf = NewBuffer(strings.NewReader(""), filename)
+			buf = NewBufferFromString("", filename)
 		} else {
-			buf = NewBuffer(file, filename)
+			buf = NewBuffer(file, FSize(file), filename)
 		}
 
 		tab := NewTabFromView(NewView(buf))
@@ -565,29 +565,25 @@ func Replace(args []string) {
 			}
 		}
 	} else {
-		bufStr := view.Buf.String()
-		matches := regex.FindAllStringIndex(bufStr, -1)
-		if matches != nil && len(matches) > 0 {
-			prevMatchCount := runePos(matches[0][0], bufStr)
-			searchCount := runePos(matches[0][1], bufStr) - prevMatchCount
-			from := FromCharPos(matches[0][0], view.Buf)
-			to := from.Move(searchCount, view.Buf)
-			adjust := Count(replace) - searchCount
-			view.Buf.Replace(from, to, replace)
-			found++
-			if len(matches) > 1 {
-				for _, match := range matches[1:] {
-					found++
-					matchCount := runePos(match[0], bufStr)
-					searchCount = runePos(match[1], bufStr) - matchCount
-					from = from.Move(matchCount-prevMatchCount+adjust, view.Buf)
-					to = from.Move(searchCount, view.Buf)
+		// var deltas []Delta
+		for i := 0; i < view.Buf.LinesNum(); i++ {
+			// view.Buf.lines[i].data = regex.ReplaceAll(view.Buf.lines[i].data, []byte(replace))
+			for {
+				m := regex.FindIndex(view.Buf.lines[i].data)
+
+				if m != nil {
+					from := Loc{m[0], i}
+					to := Loc{m[1], i}
+
+					// deltas = append(deltas, Delta{replace, from, to})
 					view.Buf.Replace(from, to, replace)
-					prevMatchCount = matchCount
-					adjust = Count(replace) - searchCount
+					found++
+				} else {
+					break
 				}
 			}
 		}
+		// view.Buf.MultipleReplace(deltas)
 	}
 	view.Cursor.Relocate()
 

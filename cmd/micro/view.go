@@ -11,15 +11,16 @@ import (
 )
 
 type ViewType struct {
+	kind     int
 	readonly bool // The file cannot be edited
 	scratch  bool // The file cannot be saved
 }
 
 var (
-	vtDefault = ViewType{false, false}
-	vtHelp    = ViewType{true, true}
-	vtLog     = ViewType{true, true}
-	vtScratch = ViewType{false, true}
+	vtDefault = ViewType{0, false, false}
+	vtHelp    = ViewType{1, true, true}
+	vtLog     = ViewType{2, true, true}
+	vtScratch = ViewType{3, false, true}
 )
 
 // The View struct stores information about a view into a buffer.
@@ -257,9 +258,9 @@ func (v *View) Open(filename string) {
 	if err != nil {
 		messenger.Message(err.Error())
 		// File does not exist -- create an empty buffer with that name
-		buf = NewBuffer(strings.NewReader(""), filename)
+		buf = NewBufferFromString("", filename)
 	} else {
-		buf = NewBuffer(file, filename)
+		buf = NewBuffer(file, FSize(file), filename)
 	}
 	v.OpenBuffer(buf)
 }
@@ -648,7 +649,7 @@ func (v *View) openHelp(helpPage string) {
 	if data, err := FindRuntimeFile(RTHelp, helpPage).Data(); err != nil {
 		TermMessage("Unable to load help text", helpPage, "\n", err)
 	} else {
-		helpBuffer := NewBuffer(strings.NewReader(string(data)), helpPage+".md")
+		helpBuffer := NewBufferFromString(string(data), helpPage+".md")
 		helpBuffer.name = "Help"
 
 		if v.Type == vtHelp {
@@ -721,6 +722,14 @@ func (v *View) DisplayView() {
 			realLineN = firstChar.realLoc.Y
 		} else {
 			realLineN++
+		}
+
+		colorcolumn := int(v.Buf.Settings["colorcolumn"].(float64))
+		if colorcolumn != 0 {
+			style := GetColor("color-column")
+			fg, _, _ := style.Decompose()
+			st := defStyle.Background(fg)
+			screen.SetContent(xOffset+colorcolumn, yOffset+visualLineN, ' ', nil, st)
 		}
 
 		screenX = v.x
@@ -816,6 +825,13 @@ func (v *View) DisplayView() {
 			if char != nil {
 				lineStyle := char.style
 
+				colorcolumn := int(v.Buf.Settings["colorcolumn"].(float64))
+				if colorcolumn != 0 && char.visualLoc.X == colorcolumn {
+					style := GetColor("color-column")
+					fg, _, _ := style.Decompose()
+					lineStyle = lineStyle.Background(fg)
+				}
+
 				charLoc := char.realLoc
 				if v.Cursor.HasSelection() &&
 					(charLoc.GreaterEqual(v.Cursor.CurSelection[0]) && charLoc.LessThan(v.Cursor.CurSelection[1]) ||
@@ -850,11 +866,13 @@ func (v *View) DisplayView() {
 		lastX := 0
 		var realLoc Loc
 		var visualLoc Loc
+		var cx, cy int
 		if lastChar != nil {
 			lastX = xOffset + lastChar.visualLoc.X + lastChar.width
 			if tabs[curTab].CurView == v.Num && !v.Cursor.HasSelection() &&
 				v.Cursor.Y == lastChar.realLoc.Y && v.Cursor.X == lastChar.realLoc.X+1 {
 				screen.ShowCursor(lastX, yOffset+lastChar.visualLoc.Y)
+				cx, cy = lastX, yOffset+lastChar.visualLoc.Y
 			}
 			realLoc = Loc{lastChar.realLoc.X, realLineN}
 			visualLoc = Loc{lastX - xOffset, lastChar.visualLoc.Y}
@@ -862,6 +880,7 @@ func (v *View) DisplayView() {
 			if tabs[curTab].CurView == v.Num && !v.Cursor.HasSelection() &&
 				v.Cursor.Y == realLineN {
 				screen.ShowCursor(xOffset, yOffset+visualLineN)
+				cx, cy = xOffset, yOffset+visualLineN
 			}
 			lastX = xOffset
 			realLoc = Loc{0, realLineN}
@@ -886,7 +905,9 @@ func (v *View) DisplayView() {
 				style := GetColor("cursor-line")
 				fg, _, _ := style.Decompose()
 				style = style.Background(fg)
-				screen.SetContent(i, yOffset+visualLineN, ' ', nil, style)
+				if !(tabs[curTab].CurView == v.Num && !v.Cursor.HasSelection() && i == cx && yOffset+visualLineN == cy) {
+					screen.SetContent(i, yOffset+visualLineN, ' ', nil, style)
+				}
 			}
 		}
 	}
@@ -910,6 +931,9 @@ func (v *View) DisplayCursor(x, y int) {
 
 // Display renders the view, the cursor, and statusline
 func (v *View) Display() {
+	if GetGlobalOption("termtitle").(bool) {
+		screen.SetTitle("micro: " + v.Buf.GetName())
+	}
 	v.DisplayView()
 	// Don't draw the cursor if it is out of the viewport or if it has a selection
 	if (v.Cursor.Y-v.Topline < 0 || v.Cursor.Y-v.Topline > v.Height-1) || v.Cursor.HasSelection() {

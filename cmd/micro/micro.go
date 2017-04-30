@@ -110,9 +110,9 @@ func LoadInput() []*Buffer {
 			}
 			// If the file didn't exist, input will be empty, and we'll open an empty buffer
 			if input != nil {
-				buffers = append(buffers, NewBuffer(input, filename))
+				buffers = append(buffers, NewBuffer(input, FSize(input), filename))
 			} else {
-				buffers = append(buffers, NewBuffer(strings.NewReader(""), filename))
+				buffers = append(buffers, NewBufferFromString("", filename))
 			}
 		}
 	} else if !isatty.IsTerminal(os.Stdin.Fd()) {
@@ -124,10 +124,10 @@ func LoadInput() []*Buffer {
 			TermMessage("Error reading from stdin: ", err)
 			input = []byte{}
 		}
-		buffers = append(buffers, NewBuffer(strings.NewReader(string(input)), filename))
+		buffers = append(buffers, NewBufferFromString(string(input), filename))
 	} else {
 		// Option 3, just open an empty buffer
-		buffers = append(buffers, NewBuffer(strings.NewReader(string(input)), filename))
+		buffers = append(buffers, NewBufferFromString(string(input), filename))
 	}
 
 	return buffers
@@ -376,6 +376,7 @@ func main() {
 	L.SetGlobal("ListRuntimeFiles", luar.New(L, PluginListRuntimeFiles))
 	L.SetGlobal("AddRuntimeFile", luar.New(L, PluginAddRuntimeFile))
 	L.SetGlobal("AddRuntimeFilesFromDirectory", luar.New(L, PluginAddRuntimeFilesFromDirectory))
+	L.SetGlobal("AddRuntimeFileFromMemory", luar.New(L, PluginAddRuntimeFileFromMemory))
 
 	jobs = make(chan JobFunction, 100)
 	events = make(chan tcell.Event, 100)
@@ -485,7 +486,6 @@ func main() {
 			default:
 				event = nil
 			}
-
 		}
 	}
 }
